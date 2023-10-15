@@ -1,8 +1,4 @@
-<<<<<<< Updated upstream
-function [theta_k, Dk, Hk, J, H] = ols_downdates(y, theta_k, Dk, min_k, H, t, J_old)
-=======
-function [theta_k, Dk, Hk, H, start] = ols_downdates(theta_k, Dk, min_k, H, t, start)
->>>>>>> Stashed changes
+function [theta_k, Dk, Hk, H] = ols_downdates(theta_k, Dk, min_k, H, t, start)
 
 
 % Code for D change (before update)
@@ -12,21 +8,22 @@ K = length(Dk(1,:));
 idx = 1:K;
 idx = setdiff(idx, min_k);
 
-
 % Update H
+% Hk update
+Hk = H(1:t, [idx, min_k]);
 H = H(:, [idx, K+1:dx, min_k]);
 
-<<<<<<< Updated upstream
-% Hk update
-Hk = H(1:t, 1:K-1);
-=======
->>>>>>> Stashed changes
+
+
+[theta_start, D_start] = start{:};
+
 
 Dknew = Dk(idx, idx);
 Dknew(K, 1:K-1) = Dk(min_k, idx);
 Dknew(:, K) = Dk([idx, min_k], min_k);
 
-
+% Reset Start
+start = {theta_k([idx, min_k]), Dknew};
 
 % Now Dk downdate code
 DK11 = Dknew(1:K-1, 1:K-1);
@@ -34,8 +31,9 @@ DK12 = Dknew(1:K-1, K);
 %DK21 = Dknew(K, 1:K-1);
 DK22 = Dknew(K,K);
 
-Dk = DK11 - DK12*DK12' /( DK22^2 );
+%Dk_swap = DK11 - DK12*DK12' /( DK22^2 );
 
+Dk = DK11 - DK12*DK12' /( DK22 );
 
 idx = 1:length(theta_k);
 idx = setdiff(idx, min_k);
@@ -43,17 +41,14 @@ idx = setdiff(idx, min_k);
 % Ratio
 ratio = DK12/DK22;
 
+
 % Update rest
 theta_k(idx) = theta_k(idx) - ratio*theta_k(min_k);
 
-% Compute Jk ---> Jk+
-% J = J + theta_k(min_k)^2/DK22;
 
 % Rest
 theta_k(min_k) = [];
-k = length(theta_k);
 
-% Compute predictive Jk ---> Jk-
-J =  J_old +  (y(t) - Hk(t, :)*theta_k)^2;
+
 
 end

@@ -3,6 +3,7 @@ close all
 clc
 
 % Settings
+<<<<<<< Updated upstream
 var_y = 0.01;   % Variance
 ps = 30;     % Sparsity percent
 dy = 100;      % System dimension
@@ -13,6 +14,19 @@ T = 1000;
 % OLASSO params
 epsilon = 1e-4;
 t0 = round(0.1*T);
+=======
+var_y = 0.1;   % Variance
+ps = 2;     % Sparsity percent
+dy = 5;      % System dimension
+r =  1;       % Range of input data H
+rt = 0.5;      % Range of theta
+T = 100;
+D = 20;
+
+% OLASSO params
+epsilon = 1e-7;
+t0 = 20;
+>>>>>>> Stashed changes
 
 n = round(0.2*T);
 Ns = 2000;
@@ -129,6 +143,122 @@ str_R = num2str(R);
 % 
 % save(filename)
 
+<<<<<<< Updated upstream
+=======
+%% PLOTS 
+
+% % Bar plot
+% figure;
+% subplot(1,3,1)
+% per_lasso = count_lasso/sum(count_lasso);
+% b_lasso = bar(per_lasso, 'FaceColor', 'flat');
+% ylim([0, 0.5])
+% ylabel('Number of Visits')
+% title('OLinLASSO Models visited ','FontSize',20)
+% set(gca, 'FontSize', 20); 
+% grid on
+% if (idx_corr_olasso == 0)
+%     text(1, 0.5*max(per_lasso), 'True Model NOT visited', 'FontSize', 15)
+% else
+%     b_lasso.CData(idx_corr_olasso,:) = [0, 0.5, 0];
+% end
+% 
+% 
+% % Bar plot
+% subplot(1,3, 2)
+% per_orls = count_orls/sum(count_orls);
+% b_orls = bar(per_orls, 'FaceColor', 'flat');
+% ylim([0, 0.5])
+% ylabel('Number of Visits')
+% title('JPLS Models visited ','FontSize',20)
+% set(gca, 'FontSize', 20);
+% grid on
+% if (idx_corr_orls==0)
+%     text(1,0.5*max(per_orls), 'True Model NOT visited', 'FontSize', 15)
+% else
+%     b_orls.CData(idx_corr_orls,:) = [0.5, 0, 0];
+% end
+
+% fsz = 20;
+% figure;
+% plot(init+1:T-1, mean(J_orls,1), 'Color', [0.5, 0, 0], 'LineWidth', 2)
+% hold on
+% plot(t0+1:T-1, mean(J_lasso,1), 'Color', [0, 0.5, 0], 'LineWidth', 2)
+% set(gca, 'FontSize',15)
+% xlabel('Time', 'FontSize', fsz)
+% ylabel('Predictive Error', 'FontSize', fsz)
+% legend('JPLS', 'OLinLASSO', 'FontSize',fsz)
+
+fsz = 15;
+% subplot(1,3,3)
+% plot(init+1:T, mean(J_oi,1), 'Color', [0.5, 0, 0], 'LineWidth', 2)
+% hold on
+% plot(t0+1:T, mean(J_ol,1), 'Color', [0, 0.5, 0], 'LineWidth', 2)
+% hold on
+% xline(t0, 'Color', [0, 0.5, 0])
+% hold on
+% text(t0+2, 0.5*max(J_oi),  't_0',   'Color' , [0, 0.5, 0],'FontSize', 15)
+% hold on
+% xline(init, 'Color', [0.5, 0, 0])
+% hold on
+% text(init+2, 0.5*max(J_ol), 't_0', 'Color' , [0.5, 0, 0],  'FontSize', 15)
+% set(gca, 'FontSize',15)
+% xlabel('Time', 'FontSize', fsz)
+% ylabel('Predictive Error', 'FontSize', fsz)
+% legend('JPLS', 'OLinLASSO', 'FontSize',fsz)
+
+
+% filename = join(['figs/OLinLASSO/T', str_T, '_K', str_dy, '_k', str_k, '_v', str_v, ...
+%     '_R', str_R, '.eps']);
+% 
+% print(gcf, filename, '-depsc2', '-r300');
+% 
+
+
+figure;
+plot( mean(J_now_orls,1), 'Color', [0.5, 0, 0], 'LineWidth', 2)
+hold on
+plot( mean(J_now_olasso,1), 'Color', [0, 0.5, 0], 'LineWidth', 2)
+hold on
+text(t0+2, 0.5*max(J_now_orls),  't_0',   'Color' , [0, 0, 0],'FontSize', 15)
+hold on
+xline(t0, 'Color', [0, 0, 0])
+xlabel('Time', 'FontSize', fsz)
+ylabel('Predictive Error', 'FontSize', fsz)
+%title('C: (y - H theta)T (y - H theta) (criterion)', 'FontSize', 15)
+legend('JPLS', 'OLASSO', 'FontSize',15, 'Location','northwest')
+
+
+figure;
+plot(e)
+hold on
+plot(J_now_olasso)
+
+
+
+title_str = join(['\sigma^2_y = ', str_v, ...
+    ',  h ~ N( 0, ', num2str(r), 'I ), ' , '  theta ~ N( 0, ', num2str(rt), 'I ) ']) ; %, ' K = ', str_dy, ',  p = ', str_k ]);
+
+sgtitle(title_str, 'FontSize', 15)
+
+%% 
+% filename = join(['figsPE/K', str_dy, '_k', str_k, '_v', str_v, '_h', num2str(r), '.eps']);
+% print(gcf, filename, '-depsc2', '-r300');
+
+%%
+% 
+% figure;
+% range = 50 : 60;
+% range = range + 230;
+% plot(mean(J_dec{1}(range), 1), 'LineWidth', 2)
+% hold on
+% plot(mean(J_dec{2}(range), 1), 'LineWidth', 2)
+% hold on
+% plot(mean(J_dec{3}(range), 1), 'LineWidth', 2)
+% title('DEC', 'FontSize', 15)
+% legend('STAY', 'UP', 'DOWN','FontSize', 15)
+
+>>>>>>> Stashed changes
 
 % Bar plot
 figure;
